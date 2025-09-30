@@ -29,7 +29,7 @@ function PropertyCard(property: Property) {
               dots={false}
               infinite
               autoplay
-              autoplaySpeed={1000}
+              autoplaySpeed={1500}
               speed={1000}
               slidesToShow={1}
               cssEase="linear"

@@ -11,7 +11,6 @@ import {
   ListItemText,
   Button,
   Chip,
-  Stack,
 } from "@mui/material";
 import useDebounce from "../../hooks/useDebounce";
 import type { FilterValues } from "../../types/filters";
@@ -130,7 +129,7 @@ function FilterPanel({
 
   return (
     <div style={{ borderRadius: 2 }}>
-      <Stack spacing={2}>
+      <div>
         {/* Search Bar */}
         <TextField
           label="Search properties"
@@ -141,40 +140,42 @@ function FilterPanel({
         />
 
         {/* Property Type Filter */}
-        <FormControl fullWidth>
-          <InputLabel>Property Type</InputLabel>
-          <Select
-            multiple
-            value={propertyType}
-            onChange={(e) =>
-              setPropertyType(
-                typeof e.target.value === "string"
-                  ? e.target.value.split(",")
-                  : (e.target.value as string[])
-              )
-            }
-            label="Property Type"
-            renderValue={(selected) => (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {(selected as string[]).map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </div>
-            )}
-          >
-            {PROPERTY_TYPES.map((type) => (
-              <MenuItem key={type} value={type}>
-                <Checkbox checked={propertyType.indexOf(type) > -1} />
-                <ListItemText
-                  primary={type.charAt(0).toUpperCase() + type.slice(1)}
-                />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div className="hidden lg:block">
+          <FormControl fullWidth sx={{ marginY: "24px" }}>
+            <InputLabel>Property Type</InputLabel>
+            <Select
+              multiple
+              value={propertyType}
+              onChange={(e) =>
+                setPropertyType(
+                  typeof e.target.value === "string"
+                    ? e.target.value.split(",")
+                    : (e.target.value as string[])
+                )
+              }
+              label="Property Type"
+              renderValue={(selected) => (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as string[]).map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </div>
+              )}
+            >
+              {PROPERTY_TYPES.map((type) => (
+                <MenuItem key={type} value={type}>
+                  <Checkbox checked={propertyType.indexOf(type) > -1} />
+                  <ListItemText
+                    primary={type.charAt(0).toUpperCase() + type.slice(1)}
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         {/* Price Range Slider */}
-        <div>
+        <div className="my-4 hidden lg:block">
           <InputLabel>Price Range ($/sqft)</InputLabel>
           <Slider
             value={priceRange}
@@ -184,7 +185,7 @@ function FilterPanel({
             max={100}
             step={1}
           />
-          <Stack direction="row" spacing={2} justifyContent="space-between">
+          <div>
             <TextField
               label="Min"
               type="number"
@@ -193,7 +194,7 @@ function FilterPanel({
               onChange={(e) =>
                 setPriceRange([Number(e.target.value), priceRange[1]])
               }
-              style={{ width: 100 }}
+              style={{ width: 100, marginRight: "16px" }}
             />
             <TextField
               label="Max"
@@ -205,11 +206,11 @@ function FilterPanel({
               }
               style={{ width: 100 }}
             />
-          </Stack>
+          </div>
         </div>
 
         {/* Size Range Slider */}
-        <div>
+        <div className="hidden lg:block">
           <InputLabel>Size Range (sqft)</InputLabel>
           <Slider
             value={sizeRange}
@@ -219,7 +220,7 @@ function FilterPanel({
             max={500000}
             step={100}
           />
-          <Stack direction="row" spacing={2} justifyContent="space-between">
+          <div>
             <TextField
               label="Min"
               type="number"
@@ -228,7 +229,7 @@ function FilterPanel({
               onChange={(e) =>
                 setSizeRange([Number(e.target.value), sizeRange[1]])
               }
-              style={{ width: 100 }}
+              style={{ width: 100, marginRight: "16px" }}
             />
             <TextField
               label="Max"
@@ -240,73 +241,85 @@ function FilterPanel({
               }
               style={{ width: 100 }}
             />
-          </Stack>
+          </div>
         </div>
 
         {/* Location Dropdown/Search */}
-        <Autocomplete
-          options={LOCATIONS}
-          value={location}
-          onChange={(_, val) => setLocation(val)}
-          renderInput={(params) => (
-            <TextField {...params} label="Location" variant="outlined" />
-          )}
-          fullWidth
-          freeSolo
-        />
+        <div className="hidden lg:block">
+          <Autocomplete
+            options={LOCATIONS}
+            value={location}
+            onChange={(_, val) => setLocation(val)}
+            renderInput={(params) => (
+              <TextField {...params} label="Location" variant="outlined" />
+            )}
+            fullWidth
+            freeSolo
+            sx={{ marginY: "24px" }}
+          />
+        </div>
 
         {/* Amenities Multi-select */}
-        <FormControl fullWidth>
-          <InputLabel>Amenities</InputLabel>
-          <Select
-            multiple
-            value={amenities}
-            onChange={(e) =>
-              setAmenities(
-                typeof e.target.value === "string"
-                  ? e.target.value.split(",")
-                  : (e.target.value as string[])
-              )
-            }
-            label="Amenities"
-            renderValue={(selected) => (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {(selected as string[]).map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </div>
-            )}
-          >
-            {AMENITIES.map((amenity) => (
-              <MenuItem key={amenity} value={amenity}>
-                <Checkbox checked={amenities.indexOf(amenity) > -1} />
-                <ListItemText primary={amenity} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div className="hidden lg:block mb-4">
+          <FormControl fullWidth>
+            <InputLabel>Amenities</InputLabel>
+            <Select
+              multiple
+              value={amenities}
+              onChange={(e) =>
+                setAmenities(
+                  typeof e.target.value === "string"
+                    ? e.target.value.split(",")
+                    : (e.target.value as string[])
+                )
+              }
+              label="Amenities"
+              renderValue={(selected) => (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as string[]).map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </div>
+              )}
+            >
+              {AMENITIES.map((amenity) => (
+                <MenuItem key={amenity} value={amenity}>
+                  <Checkbox checked={amenities.indexOf(amenity) > -1} />
+                  <ListItemText primary={amenity} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         {/* Sort By */}
-        <FormControl fullWidth>
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            value={sortBy}
-            label="Sort By"
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <MenuItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div className="hidden lg:block">
+          <FormControl fullWidth>
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              value={sortBy}
+              label="Sort By"
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
         {/* Clear All Filters */}
-        <Button variant="outlined" color="secondary" onClick={handleClearAll}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={handleClearAll}
+          style={{ marginTop: "16px" }}
+        >
           Clear All Filters
         </Button>
-      </Stack>
+      </div>
     </div>
   );
 }

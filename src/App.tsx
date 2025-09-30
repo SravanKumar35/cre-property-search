@@ -7,11 +7,13 @@ import FilterPanel from "./components/FilterPanel";
 import { usePropertyFilter } from "./hooks/usePropertyFilter";
 import GridView from "./components/GridView";
 import CardView from "./components/CardView";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 function App() {
   const [propertiesData, setPropertiesData] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showGrid, setShowGrid] = useState(false);
+  const isMobile = useIsMobile();
+  const [showGrid, setShowGrid] = useState(isMobile);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50; // load 50 properties at a time
   const { filteredData, onChange } = usePropertyFilter(propertiesData);
@@ -61,22 +63,25 @@ function App() {
       {loading ? (
         <div className="p-4">Loading properties...</div>
       ) : (
-        <div className="w-full flex p-5 items-center ">
-          <div className="w-1/4">
+        <div className="w-full flex flex-col lg:flex-row p-5 items-center ">
+          <div className="w-full lg:w-1/4 pr-4">
             <FilterPanel onChange={onChange} />
           </div>
           <div
             ref={scrollContainerRef}
-            className="w-3/4 ps-4 overflow-auto"
-            style={{ height: "calc(100vh - 40px)" }}
+            className="w-full mt-5 lg:mt-0 lg:w-3/4 pl-5 overflow-auto lg:[height:calc(100vh-40px)]"
           >
-            {filteredData.length} filtered Properties
-            <button
-              className="m-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={() => setShowGrid(!showGrid)}
-            >
-              Switch to {showGrid ? "Card" : "Grid"} View
-            </button>
+            <div className="flex items-center justify-between w-full mb-5">
+              <span className="mr-3">
+                {filteredData.length} filtered Properties
+              </span>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={() => setShowGrid(!showGrid)}
+              >
+                Switch to {showGrid ? "Card" : "Grid"} View
+              </button>
+            </div>
             {showGrid ? (
               <GridView properties={paginatedData} />
             ) : (
