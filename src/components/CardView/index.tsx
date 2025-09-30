@@ -1,3 +1,4 @@
+import React from "react";
 import type { Property } from "../../types/property";
 import PropertyCard from "../PropertyCard";
 
@@ -15,4 +16,4 @@ function CardView({ properties }: CardViewProps) {
   );
 }
 
-export default CardView;
+export default React.memo(CardView);

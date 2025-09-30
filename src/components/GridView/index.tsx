@@ -1,5 +1,8 @@
+import React from "react";
 import type { Property } from "../../types/property";
 import PropertyGrid from "../PropertyGrid";
+
+import {} from "react-window";
 
 interface GridViewProps {
   properties: Property[];
@@ -20,4 +23,4 @@ function GridView({ properties }: GridViewProps) {
   );
 }
 
-export default GridView;
+export default React.memo(GridView);

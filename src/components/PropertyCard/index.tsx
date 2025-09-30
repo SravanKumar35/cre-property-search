@@ -150,4 +150,4 @@ function PropertyCard(property: Property) {
   );
 }
 
-export default PropertyCard;
+export default React.memo(PropertyCard);
